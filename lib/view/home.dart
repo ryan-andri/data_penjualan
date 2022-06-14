@@ -42,7 +42,8 @@ class _HomePageState extends State<Home> {
     } else {
       results = data
           .where((user) =>
-              user["nm_brg"].toLowerCase().contains(search.toLowerCase()))
+              user["nm_brg"].toLowerCase().contains(search.toLowerCase()) |
+              user["tgl_trn"].contains(search))
           .toList();
     }
 
@@ -65,6 +66,7 @@ class _HomePageState extends State<Home> {
               onChanged: (value) => searchFunc(value),
               decoration: const InputDecoration(
                 labelText: 'Search',
+                hintText: 'Nama barang / Tanggal transaksi',
                 suffixIcon: Icon(Icons.search),
                 isDense: true,
                 contentPadding:
