@@ -108,10 +108,20 @@ class HomeView extends State<Home> {
                           ),
                           onTap: () {
                             String id = loadData[index]["id"].toString();
+                            String nm_brg =
+                                loadData[index]["nm_brg"].toString();
+                            String stock = loadData[index]["stock"].toString();
+                            String terjual =
+                                loadData[index]["jml_tjl"].toString();
+                            String tgl_trn =
+                                loadData[index]["tgl_trn"].toString();
+                            String jns_brg =
+                                loadData[index]["jns_brg"].toString();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Details(id)));
+                                    builder: (context) => Details(id, nm_brg,
+                                        stock, terjual, tgl_trn, jns_brg)));
                           },
                         ),
                       ),
