@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'Create.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomeView createState() => HomeView();
 }
 
-class _HomePageState extends State<Home> {
+class HomeView extends State<Home> {
   final List<Map<String, dynamic>> data = [
     {
       "id": 1,
@@ -53,7 +55,7 @@ class _HomePageState extends State<Home> {
   }
 
   @override
-  Widget build(BuildContext ctx) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Penjualan'),
@@ -66,6 +68,7 @@ class _HomePageState extends State<Home> {
               onChanged: (value) => searchFunc(value),
               decoration: const InputDecoration(
                 labelText: 'Search',
+                labelStyle: TextStyle(fontSize: 16),
                 hintText: 'Nama barang / Tanggal transaksi',
                 suffixIcon: Icon(Icons.search),
                 isDense: true,
@@ -82,11 +85,11 @@ class _HomePageState extends State<Home> {
                       itemCount: loadData.length,
                       itemBuilder: (context, index) => Card(
                         key: ValueKey(loadData[index]["id"]),
-                        color: Color.fromARGB(255, 213, 213, 213),
+                        color: const Color.fromARGB(255, 213, 213, 213),
                         child: ListTile(
                           title: Text(
                             loadData[index]['nm_brg'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
@@ -102,8 +105,8 @@ class _HomePageState extends State<Home> {
                                   'Jenis Barang: ${loadData[index]["jns_brg"].toString()}'),
                             ],
                           ),
-                          onTap: () => ScaffoldMessenger.of(ctx).showSnackBar(
-                              SnackBar(
+                          onTap: () => ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(
                                   content: Text(
                                       loadData[index]["nm_brg"].toString()))),
                         ),
@@ -116,6 +119,15 @@ class _HomePageState extends State<Home> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              //routing into add page
+              MaterialPageRoute(builder: (context) => const Create()));
+        },
       ),
     );
   }

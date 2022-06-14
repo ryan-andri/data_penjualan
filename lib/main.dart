@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'view/home.dart';
+import 'view/Home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +10,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Data Penjualan',
-      home: Home(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Home(),
+      },
     );
   }
 }
