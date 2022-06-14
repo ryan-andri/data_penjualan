@@ -1,3 +1,4 @@
+import 'package:data_penjualan/view/details.dart';
 import 'package:flutter/material.dart';
 
 import 'Create.dart';
@@ -105,10 +106,13 @@ class HomeView extends State<Home> {
                                   'Jenis Barang: ${loadData[index]["jns_brg"].toString()}'),
                             ],
                           ),
-                          onTap: () => ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(
-                                  content: Text(
-                                      loadData[index]["nm_brg"].toString()))),
+                          onTap: () {
+                            String id = loadData[index]["id"].toString();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Details(id)));
+                          },
                         ),
                       ),
                     )
