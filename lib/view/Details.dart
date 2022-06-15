@@ -17,6 +17,47 @@ class Details extends StatefulWidget {
 class DetailsView extends State<Details> {
   final formState = GlobalKey<FormState>();
 
+  void stateButton(BuildContext context, String id, String brg, String stk,
+      String trj, String jns, String trn, bool update) {
+    if (update &&
+        (id.isEmpty ||
+            brg.isEmpty ||
+            stk.isEmpty ||
+            trj.isEmpty ||
+            jns.isEmpty ||
+            trn.isEmpty)) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text("Semua Kolom harus diisi!"),
+        backgroundColor: Colors.red,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
+    AlertDialog alert = AlertDialog(
+      title: update ? Text("Update Barang") : Text("Hapus Barang"),
+      content: Container(
+        child: Text("Apakah Anda yakin ?"),
+      ),
+      actions: [
+        TextButton(
+          child: Text('Iya'),
+          // Todo : post to API
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        TextButton(
+          child: Text('Tidak'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+
+    showDialog(context: context, builder: (context) => alert);
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     var barang = TextEditingController();
@@ -45,50 +86,48 @@ class DetailsView extends State<Details> {
               // Barang
               TextFormField(
                 controller: barang,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Nama Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Nama Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Stok
               TextFormField(
                 controller: stock,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Stock Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Stock Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Jumlah Terjual
               TextFormField(
                 controller: terjual,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Jumlah Terjual',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Jumlah Terjual Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Tanggal Transaksi
               TextFormField(
                 controller: transaksi,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Tanggal Transaksi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -101,25 +140,50 @@ class DetailsView extends State<Details> {
 
                   if (date != null) transaksi.text = formatter.format(date);
                 },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Tanggal Transaksi Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Jenis Barang
               TextFormField(
                 controller: jenis,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Jenis Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Jenis Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Align(
+                    alignment: Alignment.center,
+                    child:
+                        Text("Update", style: TextStyle(color: Colors.white))),
+                onPressed: () {
+                  stateButton(context, widget.id, barang.text, stock.text,
+                      terjual.text, jenis.text, transaksi.text, true);
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Align(
+                    alignment: Alignment.center,
+                    child:
+                        Text("Hapus", style: TextStyle(color: Colors.white))),
+                onPressed: () {
+                  stateButton(context, widget.id, barang.text, stock.text,
+                      terjual.text, jenis.text, transaksi.text, false);
                 },
               ),
             ],

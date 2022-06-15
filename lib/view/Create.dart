@@ -29,6 +29,45 @@ class CreateView extends State<Create> {
     }
   }
 
+  void stateButton(BuildContext context, String brg, String stk, String trj,
+      String jns, String trn) {
+    if (brg.isEmpty ||
+        stk.isEmpty ||
+        trj.isEmpty ||
+        jns.isEmpty ||
+        trn.isEmpty) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text("Semua Kolom harus diisi!"),
+        backgroundColor: Colors.red,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
+    AlertDialog alert = AlertDialog(
+      title: Text("Tambah Data Barang"),
+      content: Container(
+        child: Text("Apakah Anda yakin ?"),
+      ),
+      actions: [
+        TextButton(
+          child: Text('Iya'),
+          // Todo : post to API
+          onPressed: () => saveState(),
+        ),
+        TextButton(
+          child: Text('Tidak'),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+
+    showDialog(context: context, builder: (context) => alert);
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,50 +84,48 @@ class CreateView extends State<Create> {
               // Barang
               TextFormField(
                 controller: barang,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Nama Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Nama Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Stok
               TextFormField(
                 controller: stock,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Stock Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Stock Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Jumlah Terjual
               TextFormField(
                 controller: terjual,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Jumlah Terjual',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Jumlah Terjual Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Tanggal Transaksi
               TextFormField(
                 controller: transaksi,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Tanggal Transaksi',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -101,26 +138,18 @@ class CreateView extends State<Create> {
 
                   if (date != null) transaksi.text = formatter.format(date);
                 },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Tanggal Transaksi Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               // Jenis Barang
               TextFormField(
                 controller: jenis,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Jenis Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Jenis Barang Tidak Boleh Kosong!';
-                  }
-                  return null;
-                },
               ),
             ],
           ),
@@ -129,9 +158,8 @@ class CreateView extends State<Create> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.save),
         onPressed: () {
-          if (formState.currentState!.validate()) {
-            saveState();
-          }
+          stateButton(context, barang.text, stock.text, terjual.text,
+              jenis.text, transaksi.text);
         },
       ),
     );

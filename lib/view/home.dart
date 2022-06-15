@@ -62,23 +62,24 @@ class HomeView extends State<Home> {
         title: const Text('Data Penjualan'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             TextField(
               onChanged: (value) => searchFunc(value),
-              decoration: const InputDecoration(
-                labelText: 'Search',
-                labelStyle: TextStyle(fontSize: 16),
+              decoration: InputDecoration(
                 hintText: 'Nama barang / Tanggal transaksi',
-                suffixIcon: Icon(Icons.search),
+                labelStyle: const TextStyle(fontSize: 18),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                suffixIcon: const Icon(Icons.search),
                 isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                contentPadding: const EdgeInsets.all(15),
               ),
             ),
             const SizedBox(
-              height: 3,
+              height: 5,
             ),
             Expanded(
               child: loadData.isNotEmpty
@@ -86,8 +87,14 @@ class HomeView extends State<Home> {
                       itemCount: loadData.length,
                       itemBuilder: (context, index) => Card(
                         key: ValueKey(loadData[index]["id"]),
-                        color: const Color.fromARGB(255, 213, 213, 213),
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                         child: ListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           title: Text(
                             loadData[index]['nm_brg'],
                             style: const TextStyle(
