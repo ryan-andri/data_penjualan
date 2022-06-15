@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart' show DateFormat;
@@ -17,13 +19,24 @@ class CreateView extends State<Create> {
   var stock = TextEditingController();
   var terjual = TextEditingController();
   var jenis = TextEditingController();
-  TextEditingController transaksi = TextEditingController();
+  var transaksi = TextEditingController();
 
   Future saveState() async {
     try {
-      // dummy
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      return await http.post(
+        Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=create"),
+        body: {
+          "nm_brg": barang.text,
+          "stock": stock.text,
+          "jml_trjl": terjual.text,
+          "tgl_trns": transaksi.text,
+          "jns_brg": jenis.text,
+        },
+      ).then((value) {
+        var data = jsonDecode(value.body);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      });
     } catch (e) {
       print(e);
     }
@@ -38,7 +51,7 @@ class CreateView extends State<Create> {
         trn.isEmpty) {
       const snackBar = SnackBar(
         duration: Duration(seconds: 2),
-        content: Text("Semua Kolom harus diisi!"),
+        content: Text("Semua Kolom harus di isi!"),
         backgroundColor: Colors.red,
       );
 
@@ -47,10 +60,8 @@ class CreateView extends State<Create> {
     }
 
     AlertDialog alert = AlertDialog(
-      title: Text("Tambah Data Barang"),
-      content: Container(
-        child: Text("Apakah Anda yakin ?"),
-      ),
+      title: const Text("Tambah Data Barang"),
+      content: const Text("Apakah Anda yakin ?"),
       actions: [
         TextButton(
           child: Text('Iya'),
@@ -96,6 +107,7 @@ class CreateView extends State<Create> {
               // Stok
               TextFormField(
                 controller: stock,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Stock Barang',
                   border: OutlineInputBorder(
@@ -108,6 +120,7 @@ class CreateView extends State<Create> {
               // Jumlah Terjual
               TextFormField(
                 controller: terjual,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Jumlah Terjual',
                   border: OutlineInputBorder(
@@ -130,7 +143,7 @@ class CreateView extends State<Create> {
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
                   final DateFormat formatter = DateFormat('dd-MM-yyyy');
-                  DateTime? date = await showDatePicker(
+                  final DateTime? date = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),

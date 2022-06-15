@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' show DateFormat;
 
 class Details extends StatefulWidget {
@@ -16,6 +19,49 @@ class Details extends StatefulWidget {
 
 class DetailsView extends State<Details> {
   final formState = GlobalKey<FormState>();
+
+  var barang = TextEditingController();
+  var stock = TextEditingController();
+  var terjual = TextEditingController();
+  var jenis = TextEditingController();
+  var transaksi = TextEditingController();
+
+  Future updateOrDelete(bool update) async {
+    try {
+      // singkat dengan ternari
+      var target = update
+          ? await http.post(
+              Uri.parse(
+                  "http://192.168.100.49/data_penjualan/api.php?opt=update"),
+              body: {
+                "id": widget.id,
+                "nm_brg": barang.text,
+                "stock": stock.text,
+                "jml_trjl": terjual.text,
+                "tgl_trns": transaksi.text,
+                "jns_brg": jenis.text,
+              },
+            ).then((value) {
+              var data = jsonDecode(value.body);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/', (Route<dynamic> route) => false);
+            })
+          : await http.post(
+              Uri.parse(
+                  "http://192.168.100.49/data_penjualan/api.php?opt=delete"),
+              body: {
+                "id": widget.id,
+              },
+            ).then((value) {
+              var data = jsonDecode(value.body);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/', (Route<dynamic> route) => false);
+            });
+      return target;
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void stateButton(BuildContext context, String id, String brg, String stk,
       String trj, String jns, String trn, bool update) {
@@ -44,8 +90,7 @@ class DetailsView extends State<Details> {
       actions: [
         TextButton(
           child: Text('Iya'),
-          // Todo : post to API
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => updateOrDelete(update),
         ),
         TextButton(
           child: Text('Tidak'),
@@ -60,12 +105,6 @@ class DetailsView extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    var barang = TextEditingController();
-    var stock = TextEditingController();
-    var terjual = TextEditingController();
-    var jenis = TextEditingController();
-    TextEditingController transaksi = TextEditingController();
-
     barang.text = widget.nm_brg;
     stock.text = widget.stock;
     terjual.text = widget.terjual;
@@ -98,6 +137,7 @@ class DetailsView extends State<Details> {
               // Stok
               TextFormField(
                 controller: stock,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Stock Barang',
                   border: OutlineInputBorder(
@@ -110,6 +150,7 @@ class DetailsView extends State<Details> {
               // Jumlah Terjual
               TextFormField(
                 controller: terjual,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'Jumlah Terjual',
                   border: OutlineInputBorder(
@@ -131,14 +172,18 @@ class DetailsView extends State<Details> {
                 ),
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  final DateFormat formatter = DateFormat('dd-MM-yyyy');
                   DateTime? date = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100));
 
-                  if (date != null) transaksi.text = formatter.format(date);
+                  if (date != null) {
+                    String picked = DateFormat('yyyy-MM-dd').format(date);
+                    setState(() {
+                      transaksi.text = picked;
+                    });
+                  }
                 },
               ),
               const SizedBox(height: 6),
@@ -153,7 +198,7 @@ class DetailsView extends State<Details> {
                   filled: true,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 35),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -169,7 +214,7 @@ class DetailsView extends State<Details> {
                       terjual.text, jenis.text, transaksi.text, true);
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red,

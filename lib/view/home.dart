@@ -1,7 +1,10 @@
-import 'package:data_penjualan/view/details.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'Create.dart';
+import 'Details.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,45 +14,44 @@ class Home extends StatefulWidget {
 }
 
 class HomeView extends State<Home> {
-  final List<Map<String, dynamic>> data = [
-    {
-      "id": 1,
-      "nm_brg": "Kopi",
-      "stock": 100,
-      "jml_tjl": 10,
-      "tgl_trn": "01-05-2021",
-      "jns_brg": "Konsumsi"
-    },
-    {
-      "id": 2,
-      "nm_brg": "Teh",
-      "stock": 100,
-      "jml_tjl": 19,
-      "tgl_trn": "05-05-2021",
-      "jns_brg": "Konsumsi"
-    },
-  ];
-
-  List<Map<String, dynamic>> loadData = [];
+  List storedData = [];
+  List loadData = [];
 
   @override
   initState() {
-    loadData = data;
     super.initState();
+    observeData();
   }
 
-  void searchFunc(String search) {
-    List<Map<String, dynamic>> results = [];
+  Future observeData() async {
+    try {
+      final response = await http.get(
+          Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=list"));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          loadData = data;
+          storedData = data;
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void searchFunc(String search) async {
+    List results = [];
+
     if (search.isEmpty) {
-      results = data;
+      results = storedData;
     } else {
-      results = data
-          .where((user) =>
-              user["nm_brg"].toLowerCase().contains(search.toLowerCase()) |
-              user["tgl_trn"].contains(search))
+      results = storedData
+          .where((data) =>
+              data["nm_brg"].toLowerCase().contains(search.toLowerCase()) |
+              data["tgl_trns"].contains(search))
           .toList();
     }
-
     setState(() {
       loadData = results;
     });
@@ -66,6 +68,7 @@ class HomeView extends State<Home> {
         child: Column(
           children: [
             TextField(
+              autofocus: false,
               onChanged: (value) => searchFunc(value),
               decoration: InputDecoration(
                 hintText: 'Nama barang / Tanggal transaksi',
@@ -74,7 +77,6 @@ class HomeView extends State<Home> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 suffixIcon: const Icon(Icons.search),
-                isDense: true,
                 contentPadding: const EdgeInsets.all(15),
               ),
             ),
@@ -82,19 +84,19 @@ class HomeView extends State<Home> {
               height: 5,
             ),
             Expanded(
-              child: loadData.isNotEmpty
+              child: storedData.isNotEmpty
                   ? ListView.builder(
                       itemCount: loadData.length,
                       itemBuilder: (context, index) => Card(
-                        key: ValueKey(loadData[index]["id"]),
-                        color: Color.fromARGB(255, 255, 255, 255),
+                        key: ValueKey(loadData[index]["id_brg"]),
+                        color: const Color.fromARGB(255, 255, 255, 255),
                         elevation: 6,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 6),
                           title: Text(
                             loadData[index]['nm_brg'],
                             style: const TextStyle(
@@ -104,24 +106,25 @@ class HomeView extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'Stock: ${loadData[index]["stock"].toString()}'),
+                                  'Stock: ${loadData[index]["stk_brg"].toString()}'),
                               Text(
-                                  'Jumlah Terjual: ${loadData[index]["jml_tjl"].toString()}'),
+                                  'Jumlah Terjual: ${loadData[index]["jml_trjl"].toString()}'),
                               Text(
-                                  'Tanggal Transaksi: ${loadData[index]["tgl_trn"].toString()}'),
+                                  'Tanggal Transaksi: ${loadData[index]["tgl_trns"].toString()}'),
                               Text(
                                   'Jenis Barang: ${loadData[index]["jns_brg"].toString()}'),
                             ],
                           ),
                           onTap: () {
-                            String id = loadData[index]["id"].toString();
+                            String id = loadData[index]["id_brg"].toString();
                             String nm_brg =
                                 loadData[index]["nm_brg"].toString();
-                            String stock = loadData[index]["stock"].toString();
+                            String stock =
+                                loadData[index]["stk_brg"].toString();
                             String terjual =
-                                loadData[index]["jml_tjl"].toString();
+                                loadData[index]["jml_trjl"].toString();
                             String tgl_trn =
-                                loadData[index]["tgl_trn"].toString();
+                                loadData[index]["tgl_trns"].toString();
                             String jns_brg =
                                 loadData[index]["jns_brg"].toString();
                             Navigator.push(
