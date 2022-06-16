@@ -182,7 +182,7 @@ class DetailsView extends State<Details> {
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100));
                   setState(() {
-                    tgl_trans.text = dateformat.format(date!);
+                    if (date != null) tgl_trans.text = dateformat.format(date);
                   });
                 },
               ),

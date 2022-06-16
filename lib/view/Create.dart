@@ -144,7 +144,7 @@ class CreateView extends State<Create> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100));
-                  transaksi.text = formatter.format(date!);
+                  if (date != null) transaksi.text = formatter.format(date);
                 },
               ),
               const SizedBox(height: 6),
