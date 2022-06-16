@@ -29,14 +29,13 @@ class HomeView extends State<Home> {
   Future observeData() async {
     try {
       final response = await http.get(
-          Uri.parse("http://192.168.152.220/data_penjualan/api.php?opt=list"));
+          Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=list"));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
           loadData = data;
           storedData = data;
-          print(data[0]['tgl_trns']);
         });
       }
     } catch (e) {
@@ -53,7 +52,8 @@ class HomeView extends State<Home> {
       results = storedData
           .where((data) =>
               data["nm_brg"].toLowerCase().contains(search.toLowerCase()) |
-              data["tgl_trns"].contains(search))
+              data["tgl_trns"].contains(search) |
+              data["jns_brg"].toLowerCase().contains(search.toLowerCase()))
           .toList();
     }
     setState(() {
@@ -71,9 +71,14 @@ class HomeView extends State<Home> {
     );
 
     if (result != null) {
+      print(result.start);
+      print(result.end);
       if (!mounted) return;
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Daterange(storedData, result.start, result.end)));
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Daterange(storedData, result.start, result.end)));
     }
   }
 

@@ -24,7 +24,7 @@ class CreateView extends State<Create> {
   Future saveState() async {
     try {
       return await http.post(
-        Uri.parse("http://192.168.152.220/data_penjualan/api.php?opt=create"),
+        Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=create"),
         body: {
           "nm_brg": barang.text,
           "stock": stock.text,
@@ -65,7 +65,6 @@ class CreateView extends State<Create> {
       actions: [
         TextButton(
           child: Text('Iya'),
-          // Todo : post to API
           onPressed: () => saveState(),
         ),
         TextButton(

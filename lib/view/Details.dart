@@ -45,7 +45,7 @@ class DetailsView extends State<Details> {
       var target = update
           ? await http.post(
               Uri.parse(
-                  "http://192.168.152.220/data_penjualan/api.php?opt=update"),
+                  "http://192.168.100.49/data_penjualan/api.php?opt=update"),
               body: {
                 "id": widget.id,
                 "nm_brg": barang.text,
@@ -61,7 +61,7 @@ class DetailsView extends State<Details> {
             })
           : await http.post(
               Uri.parse(
-                  "http://192.168.152.220/data_penjualan/api.php?opt=delete"),
+                  "http://192.168.100.49/data_penjualan/api.php?opt=delete"),
               body: {
                 "id": widget.id,
               },
