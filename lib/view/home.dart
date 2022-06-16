@@ -96,7 +96,7 @@ class HomeView extends State<Home> {
               autofocus: false,
               onChanged: (value) => searchFunc(value),
               decoration: InputDecoration(
-                hintText: 'Nama barang / Tanggal transaksi',
+                hintText: 'Nama barang / Tanggal transaksi / Jenis Barang',
                 labelStyle: const TextStyle(fontSize: 18),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),

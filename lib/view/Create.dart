@@ -92,10 +92,14 @@ class CreateView extends State<Create> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Barang
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Nama Barang',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold))),
               TextFormField(
                 controller: barang,
                 decoration: InputDecoration(
-                  hintText: 'Nama Barang',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -103,11 +107,15 @@ class CreateView extends State<Create> {
               ),
               const SizedBox(height: 6),
               // Stok
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Stock Barang',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold))),
               TextFormField(
                 controller: stock,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: 'Stock Barang',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -115,11 +123,15 @@ class CreateView extends State<Create> {
               ),
               const SizedBox(height: 6),
               // Jumlah Terjual
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Jumlah Terjual',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold))),
               TextFormField(
                 controller: terjual,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: 'Jumlah Terjual',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -127,10 +139,14 @@ class CreateView extends State<Create> {
               ),
               const SizedBox(height: 6),
               // Tanggal Transaksi
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Tanggal Transaksi',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold))),
               TextFormField(
                 controller: transaksi,
                 decoration: InputDecoration(
-                  hintText: 'Tanggal Transaksi',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -148,10 +164,14 @@ class CreateView extends State<Create> {
               ),
               const SizedBox(height: 6),
               // Jenis Barang
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Jenis Barang',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold))),
               TextFormField(
                 controller: jenis,
                 decoration: InputDecoration(
-                  hintText: 'Jenis Barang',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

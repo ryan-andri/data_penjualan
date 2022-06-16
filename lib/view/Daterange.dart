@@ -15,7 +15,6 @@ class _WidgetDaterange extends State<Daterange> {
   final formState = GlobalKey<FormState>();
 
   List searchData = [];
-  List storedData = [];
 
   @override
   void initState() {
