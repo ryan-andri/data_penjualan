@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:data_penjualan/exfab.dart';
+
 import 'Create.dart';
 import 'Details.dart';
 
@@ -144,14 +146,21 @@ class HomeView extends State<Home> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              //routing into add page
-              MaterialPageRoute(builder: (context) => const Create()));
-        },
+      floatingActionButton: ExpandableFab(
+        distance: 80,
+        children: [
+          ActionButton(
+            onPressed: () => Navigator.push(
+                context,
+                //routing into add page
+                MaterialPageRoute(builder: (context) => const Create())),
+            icon: const Icon(Icons.add, color: Colors.white),
+          ),
+          const ActionButton(
+            // onPressed: () => (context) => const Create(),
+            icon: Icon(Icons.search, color: Colors.white),
+          ),
+        ],
       ),
     );
   }
