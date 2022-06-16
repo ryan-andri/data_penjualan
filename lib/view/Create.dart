@@ -88,8 +88,7 @@ class CreateView extends State<Create> {
         key: formState,
         child: Container(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               // Barang
               const Padding(
