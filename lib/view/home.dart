@@ -7,6 +7,7 @@ import 'package:data_penjualan/exfab.dart';
 
 import 'Create.dart';
 import 'Details.dart';
+import 'Daterange.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class HomeView extends State<Home> {
         setState(() {
           loadData = data;
           storedData = data;
+          print(data[0]['tgl_trns']);
         });
       }
     } catch (e) {
@@ -57,6 +59,22 @@ class HomeView extends State<Home> {
     setState(() {
       loadData = results;
     });
+  }
+
+  void daterange() async {
+    final DateTimeRange? result = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      currentDate: DateTime.now(),
+      saveText: 'Cari',
+    );
+
+    if (result != null) {
+      if (!mounted) return;
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Daterange(storedData, result.start, result.end)));
+    }
   }
 
   @override
@@ -150,15 +168,13 @@ class HomeView extends State<Home> {
         distance: 80,
         children: [
           ActionButton(
-            onPressed: () => Navigator.push(
-                context,
-                //routing into add page
+            onPressed: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Create())),
             icon: const Icon(Icons.add, color: Colors.white),
           ),
-          const ActionButton(
-            // onPressed: () => (context) => const Create(),
-            icon: Icon(Icons.search, color: Colors.white),
+          ActionButton(
+            onPressed: daterange,
+            icon: const Icon(Icons.date_range, color: Colors.white),
           ),
         ],
       ),
