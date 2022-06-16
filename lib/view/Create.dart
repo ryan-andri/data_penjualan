@@ -15,16 +15,16 @@ class Create extends StatefulWidget {
 class CreateView extends State<Create> {
   final formState = GlobalKey<FormState>();
 
-  var barang = TextEditingController();
-  var stock = TextEditingController();
-  var terjual = TextEditingController();
-  var jenis = TextEditingController();
-  var transaksi = TextEditingController();
+  TextEditingController barang = TextEditingController();
+  TextEditingController stock = TextEditingController();
+  TextEditingController terjual = TextEditingController();
+  TextEditingController jenis = TextEditingController();
+  TextEditingController transaksi = TextEditingController();
 
   Future saveState() async {
     try {
       return await http.post(
-        Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=create"),
+        Uri.parse("http://192.168.152.220/data_penjualan/api.php?opt=create"),
         body: {
           "nm_brg": barang.text,
           "stock": stock.text,
@@ -100,7 +100,6 @@ class CreateView extends State<Create> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
@@ -113,7 +112,6 @@ class CreateView extends State<Create> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
@@ -126,7 +124,6 @@ class CreateView extends State<Create> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
@@ -138,7 +135,6 @@ class CreateView extends State<Create> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -148,8 +144,7 @@ class CreateView extends State<Create> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100));
-
-                  if (date != null) transaksi.text = formatter.format(date);
+                  transaksi.text = formatter.format(date!);
                 },
               ),
               const SizedBox(height: 6),
@@ -161,7 +156,6 @@ class CreateView extends State<Create> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
             ],

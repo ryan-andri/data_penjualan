@@ -20,11 +20,24 @@ class Details extends StatefulWidget {
 class DetailsView extends State<Details> {
   final formState = GlobalKey<FormState>();
 
-  var barang = TextEditingController();
-  var stock = TextEditingController();
-  var terjual = TextEditingController();
-  var jenis = TextEditingController();
-  var transaksi = TextEditingController();
+  final DateFormat dateformat = DateFormat('dd-MM-yyyy');
+
+  // text input controller
+  TextEditingController barang = TextEditingController();
+  TextEditingController stock = TextEditingController();
+  TextEditingController terjual = TextEditingController();
+  TextEditingController jenis = TextEditingController();
+  TextEditingController tgl_trans = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    barang.text = widget.nm_brg;
+    stock.text = widget.stock;
+    terjual.text = widget.terjual;
+    jenis.text = widget.jns_brg;
+    tgl_trans.text = widget.tgl_trn;
+  }
 
   Future updateOrDelete(bool update) async {
     try {
@@ -32,13 +45,13 @@ class DetailsView extends State<Details> {
       var target = update
           ? await http.post(
               Uri.parse(
-                  "http://192.168.100.49/data_penjualan/api.php?opt=update"),
+                  "http://192.168.152.220/data_penjualan/api.php?opt=update"),
               body: {
                 "id": widget.id,
                 "nm_brg": barang.text,
                 "stock": stock.text,
                 "jml_trjl": terjual.text,
-                "tgl_trns": transaksi.text,
+                "tgl_trns": tgl_trans.text,
                 "jns_brg": jenis.text,
               },
             ).then((value) {
@@ -48,7 +61,7 @@ class DetailsView extends State<Details> {
             })
           : await http.post(
               Uri.parse(
-                  "http://192.168.100.49/data_penjualan/api.php?opt=delete"),
+                  "http://192.168.152.220/data_penjualan/api.php?opt=delete"),
               body: {
                 "id": widget.id,
               },
@@ -105,12 +118,6 @@ class DetailsView extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    barang.text = widget.nm_brg;
-    stock.text = widget.stock;
-    terjual.text = widget.terjual;
-    jenis.text = widget.jns_brg;
-    transaksi.text = widget.tgl_trn;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details Barang"),
@@ -130,7 +137,6 @@ class DetailsView extends State<Details> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
@@ -143,7 +149,6 @@ class DetailsView extends State<Details> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
@@ -156,19 +161,18 @@ class DetailsView extends State<Details> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 6),
               // Tanggal Transaksi
               TextFormField(
-                controller: transaksi,
+                controller: tgl_trans,
+                keyboardType: TextInputType.datetime,
                 decoration: InputDecoration(
                   hintText: 'Tanggal Transaksi',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
                 onTap: () async {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -177,13 +181,9 @@ class DetailsView extends State<Details> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100));
-
-                  if (date != null) {
-                    String picked = DateFormat('yyyy-MM-dd').format(date);
-                    setState(() {
-                      transaksi.text = picked;
-                    });
-                  }
+                  setState(() {
+                    tgl_trans.text = dateformat.format(date!);
+                  });
                 },
               ),
               const SizedBox(height: 6),
@@ -195,7 +195,6 @@ class DetailsView extends State<Details> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  filled: true,
                 ),
               ),
               const SizedBox(height: 35),
@@ -211,7 +210,7 @@ class DetailsView extends State<Details> {
                         Text("Update", style: TextStyle(color: Colors.white))),
                 onPressed: () {
                   stateButton(context, widget.id, barang.text, stock.text,
-                      terjual.text, jenis.text, transaksi.text, true);
+                      terjual.text, jenis.text, tgl_trans.text, true);
                 },
               ),
               const SizedBox(height: 12),
@@ -228,7 +227,7 @@ class DetailsView extends State<Details> {
                         Text("Hapus", style: TextStyle(color: Colors.white))),
                 onPressed: () {
                   stateButton(context, widget.id, barang.text, stock.text,
-                      terjual.text, jenis.text, transaksi.text, false);
+                      terjual.text, jenis.text, tgl_trans.text, false);
                 },
               ),
             ],

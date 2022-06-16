@@ -26,7 +26,7 @@ class HomeView extends State<Home> {
   Future observeData() async {
     try {
       final response = await http.get(
-          Uri.parse("http://192.168.100.49/data_penjualan/api.php?opt=list"));
+          Uri.parse("http://192.168.152.220/data_penjualan/api.php?opt=list"));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
